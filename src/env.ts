@@ -9,9 +9,9 @@ export const env = createEnv({
   },
 
   //   Client Example
-  client: {
-    NEXT_PUBLIC_TEST: z.string(),
-  },
+  // client: {
+  //   NEXT_PUBLIC_TEST: z.string(),
+  // },
 
   runtimeEnv: {
     BACKEND_URL: process.env.BACKEND_URL,

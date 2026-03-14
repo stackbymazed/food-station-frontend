@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"); */
 
 /* Theme Variables */
 :root {
@@ -8,7 +8,7 @@
 
   --primary: #ff6e05;
   --primary-hover: #ff8a33;
-  --secondary: #0f172a;
+  --secondary: #0f172a; 
 
   --surface: #ffffff;
   --text-muted: #64748b;

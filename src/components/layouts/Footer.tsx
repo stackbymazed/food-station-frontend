@@ -13,7 +13,7 @@ export default function Footer() {
           {/* Logo */}
           <div>
             <div className="text-3xl font-extrabold text-white mb-6">
-              <span className="text-orange-500">Tay</span>Food
+              <span className="text-orange-500">Food</span>Station
             </div>
 
             <p className="leading-relaxed mb-6">

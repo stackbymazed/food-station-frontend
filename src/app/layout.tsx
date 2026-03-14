@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono ,Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layouts/Header";
 import Footer from "@/components/layouts/Footer";
-
-
-import { Outfit, Playfair_Display } from "next/font/google";
 
 const outfit = Outfit({
   subsets: ["latin"],

@@ -23,7 +23,7 @@ export default function Header() {
   return (
     <>
       {/* Top Bar */}
-      <div className="bg-orange-500 text-white text-sm">
+      {/* <div className="bg-orange-500 text-white text-sm">
         <div className="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center">
 
           <div className="flex gap-6 items-center">
@@ -54,7 +54,7 @@ export default function Header() {
             </a>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Navbar */}
       <nav className="bg-white/90 backdrop-blur sticky top-0 z-50 shadow-sm">
@@ -62,7 +62,7 @@ export default function Header() {
 
           {/* Logo */}
           <div className="text-2xl font-extrabold text-slate-900">
-            <span className="text-orange-500">Tay</span>Food
+            <span className="text-orange-500">Food</span>Station
           </div>
 
           {/* Nav Links */}
@@ -76,22 +76,37 @@ export default function Header() {
 
             <li>
               <Link href="/about" className={`${isActive("/about")} hover:text-orange-500`}>
-                About
+                Browse Meals
               </Link>
             </li>
 
             <li>
               <Link href="/menu" className={`${isActive("/menu")} hover:text-orange-500`}>
-                Menu
+                Provider
               </Link>
             </li>
 
-            <li>
+            {/* <li>
               <Link href="/service" className={`${isActive("/service")} hover:text-orange-500`}>
                 Service
               </Link>
             </li>
 
+            <li>
+              <Link href="/contact" className={`${isActive("/contact")} hover:text-orange-500`}>
+                Contact
+              </Link>
+            </li> */}
+            <li>
+              <Link href="/contact" className={`${isActive("/contact")} hover:text-orange-500`}>
+                Checkout
+              </Link>
+            </li>
+            <li>
+              <Link href="/contact" className={`${isActive("/contact")} hover:text-orange-500`}>
+                My Orders
+              </Link>
+            </li>
             <li>
               <Link href="/contact" className={`${isActive("/contact")} hover:text-orange-500`}>
                 Contact
@@ -104,10 +119,6 @@ export default function Header() {
           <div className="flex items-center gap-5">
 
             <button className="relative text-slate-700 hover:text-orange-500">
-              <Search size={22} />
-            </button>
-
-            <button className="relative text-slate-700 hover:text-orange-500">
               <ShoppingCart size={22} />
               <span className="absolute -top-2 -right-2 text-xs bg-orange-500 text-white w-4 h-4 rounded-full flex items-center justify-center">
                 3
@@ -118,9 +129,18 @@ export default function Header() {
               <User size={22} />
             </button>
 
-            <button className="hidden md:block bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-semibold shadow">
-              Reservation
-            </button>
+
+            <Link href="/login">
+              <button className="hidden md:block bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-semibold shadow">
+                LogIn
+              </button>
+            </Link>
+
+            <Link href="/register">
+              <button className="hidden md:block bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-semibold shadow">
+                Register
+              </button>
+            </Link>
 
           </div>
         </div>
