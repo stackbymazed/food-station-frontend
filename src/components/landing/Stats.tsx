@@ -2,7 +2,7 @@ import Counter from "@/components/ui/Counter";
 
 export default function Stats() {
   return (
-    <section className="bg-slate-900 text-white py-20">
+    <section className="background text-black py-20">
 
       <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-8 text-center">
 
