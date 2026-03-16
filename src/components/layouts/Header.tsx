@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 
@@ -26,6 +26,7 @@ export default function Header() {
     await authClient.signOut();
 
     toast.success("Logged out successfully", { id: loading });
+    redirect("/login");
   };
 
   if (isPending) return null;
@@ -74,8 +75,8 @@ export default function Header() {
           </li>
 
           <li>
-            <Link href="/contact" className={`${isActive("/contact")} hover:text-orange-500`}>
-              Contact
+            <Link href="/add-meal" className={`${isActive("/add-meal")} hover:text-orange-500`}>
+              Add Meal
             </Link>
           </li>
 

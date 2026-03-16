@@ -12,6 +12,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
 import { authClient } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 
 type LoginFormData = {
   email: string;
@@ -39,16 +40,16 @@ export default function LoginForm() {
         email: value.email,
         password: value.password
       });
-
+      console.log( data, error);
       if (error) {
         toast.error(error.message, { id: loadingToast });
       }
 
       if (data) {
-        toast.success("Login successful 🎉", { id: loadingToast });
+        toast.success("Login successful ", { id: loadingToast });
 
         // redirect dashboard
-        window.location.href = "/dashboard";
+        window.location.href = "/";
       }
 
     } catch (error: unknown) {
