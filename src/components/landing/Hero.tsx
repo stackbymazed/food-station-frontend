@@ -70,7 +70,7 @@ export default function Hero() {
             <div className="absolute inset-[-20px] lg:inset-[-30px] border-[3px] border-dashed border-orange-500/50 rounded-full animate-[spin_10s_linear_infinite] -z-20"></div>
 
             {/* Inner colorful gradient spinner restricted to 2 colors - reduced spread */}
-            <div className="absolute inset-[-3px] rounded-full bg-[conic-gradient(from_0deg,#f97316_0deg,#f97316_180deg,#ffffff_180deg,#ffffff_360deg)] animate-[spin_4s_linear_infinite] -z-10 opacity-90 shadow-sm border border-black/10"></div>
+            <div className="absolute inset-[-3px] rounded-full bg-[conic-gradient(from_0deg,#f97316_0deg,#f97316_180deg,#ffffff_180deg,#ffffff_360deg)] animate-[spin_12s_linear_infinite] -z-10 opacity-90 shadow-sm border border-black/10"></div>
 
             {/* The actual image clipping */}
             <div className="w-full h-full rounded-full overflow-hidden relative z-10 bg-slate-800 shadow-inner">

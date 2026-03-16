@@ -1,4 +1,4 @@
-import { Utensils, Calendar, MessageCircle, ArrowRight } from "lucide-react";
+import { Utensils, Calendar, MessageCircle, ArrowRight, ArrowLeft } from "lucide-react";
 
 export default function Blogs() {
   const latestBlogs = [
@@ -39,7 +39,7 @@ export default function Blogs() {
         <div className="text-left w-full md:w-auto mb-8 flex justify-between items-center">
           <div>
             <div className="flex items-center gap-2 font-bold mb-2">
-              <h4 className="text-orange-500 font-pacifico tracking-widest text-2xl">Food Menu</h4>
+              <h4 className="text-orange-500 font-pacifico tracking-widest text-2xl">News & Blogs</h4>
               {/* Small abstract leaf icon next to Food Menu */}
               <svg className="text-red-500 w-8 h-8 -mt-1" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 22C12 22 17 18.5 17 14C17 11.2386 14.7614 9 12 9C9.23858 9 7 11.2386 7 14C7 18.5 12 22 12 22Z" />
@@ -49,7 +49,7 @@ export default function Blogs() {
               </svg>
             </div>
             <h2 className="text-4xl text-[#1e1b4b] font-extrabold tracking-tight">
-              Popular Delicious Foods
+              Our Latest Foods Blog
             </h2>
           </div>
           {/* Carousel Navigation Arrows */}
