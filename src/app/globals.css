@@ -63,6 +63,8 @@
   --color-secondary: var(--secondary);
 
   --font-sans: var(--font-sans);
+  --font-outfit: var(--font-outfit);
+  --font-playfair: var(--font-playfair);
   --font-serif: "Playfair Display", serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);

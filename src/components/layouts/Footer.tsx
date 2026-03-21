@@ -1,10 +1,11 @@
 "use client";
 
 import { Facebook, Twitter, Instagram, Linkedin, ArrowRight } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-900 text-slate-300 pt-20">
+    <footer className="bg-slate-900 text-slate-300 pt-20 transition-all duration-300">
 
       <div className="max-w-7xl mx-auto px-6">
 

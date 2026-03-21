@@ -1,4 +1,5 @@
-import { Heart, Eye, Star, ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import MealCard from "@/components/layouts/MealCard";
 
 const mockFoods = [
   {
@@ -91,77 +92,20 @@ export default function PopularFoods() {
       {/* Food Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
         {mockFoods.map((food, index) => (
-          <div
-            key={food.id}
-            className="bg-[#fafafa] shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden group flex flex-col h-full relative"
-            style={{ animationDelay: `${index * 100}ms`, animationDuration: '800ms' }}
-          >
-            {/* Image Container with precise category overlay */}
-            <div className="relative h-64 w-full bg-slate-100 overflow-hidden shrink-0">
-              <img
-                src={food.image}
-                alt={food.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-              />
-
-              {/* Category Badge - Orange rectangle bottom right overlapping the image slightly */}
-              <div className="absolute -bottom-0 right-0 bg-[#f97316] text-white text-[13px] italic font-semibold font-pacifico px-5 py-2 shadow-sm z-10">
-                {food.category}
-              </div>
-            </div>
-
-            {/* White Body taking up the rest of the space */}
-            <div className="bg-white flex-1 p-6 pb-20 relative border-l border-r border-[#f1f5f9]">
-              <h3 className="text-[17px] font-extrabold text-[#111827] text-center mb-4 tracking-tight">
-                {food.title}
-              </h3>
-
-              {/* Custom Star Rating Layout */}
-              <div className="flex items-center justify-center gap-0.5 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-4 h-4 ${i < Math.floor(food.rating) ? 'text-[#f97316] fill-currentColor' : 'text-gray-300'} stroke-current`}
-                    style={{ fill: i < Math.floor(food.rating) ? 'currentColor' : 'none' }}
-                  />
-                ))}
-                <span className="text-[#374151] font-medium text-sm ml-2">— {food.reviews}</span>
-              </div>
-
-              {/* Price Container */}
-              <div className="flex items-center justify-center gap-2 pt-1 border-t border-dashed border-gray-200 w-3/4 mx-auto mt-4">
-                <span className="text-[22px] font-bold text-[#f97316]">${food.price.toFixed(2)}</span>
-                {food.oldPrice && (
-                  <span className="text-sm font-medium text-gray-400 line-through">${food.oldPrice.toFixed(2)}</span>
-                )}
-              </div>
-            </div>
-
-            {/* Bottom Actions Floating absolute row exactly like the mockup */}
-            <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between pointer-events-none mt-4">
-
-              {/* Add To Cart button taking up most space */}
-              <button className="bg-[#f97316] hover:bg-orange-600 text-white py-2.5 px-6 font-semibold text-sm transition-colors shadow-sm pointer-events-auto"
-                style={{ borderRadius: '0px', borderTopLeftRadius: '16px', borderBottomRightRadius: '16px' }}
-              >
-                add To Cart
-              </button>
-
-              <div className="flex items-center gap-2 pointer-events-auto pr-4 mb-2">
-                <button className="w-9 h-9 border border-[#f97316] text-[#f97316] flex items-center justify-center hover:bg-orange-50 transition-colors shadow-sm bg-white"
-                  style={{ borderRadius: '0px' }}
-                >
-                  <Heart size={16} />
-                </button>
-                <button className="w-9 h-9 border border-[#f97316] text-[#f97316] flex items-center justify-center hover:bg-orange-50 transition-colors shadow-sm bg-white"
-                  style={{ borderRadius: '0px' }}
-                >
-                  <Eye size={16} />
-                </button>
-              </div>
-            </div>
-
-          </div>
+          <MealCard 
+            key={food.id} 
+            index={index}
+            food={{
+              id: food.id,
+              name: food.title,
+              mainImage: food.image,
+              category: food.category,
+              rating: food.rating,
+              reviewCount: food.reviews,
+              price: food.price,
+              discountPrice: food.oldPrice
+            }} 
+          />
         ))}
       </div>
 

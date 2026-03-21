@@ -20,19 +20,14 @@ export default function Header() {
     pathname === path ? "text-orange-500" : "text-slate-700";
 
   const handleLogout = async () => {
-
     const loading = toast.loading("Logging out...");
-
     await authClient.signOut();
-
     toast.success("Logged out successfully", { id: loading });
     redirect("/login");
   };
 
-  if (isPending) return null;
-
   return (
-    <nav className="bg-white/90 backdrop-blur sticky top-0 z-50 shadow-sm">
+    <nav className="bg-white/90 backdrop-blur sticky top-0 z-50 shadow-sm transition-all duration-300">
 
       <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
 
