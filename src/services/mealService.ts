@@ -47,6 +47,7 @@ export type TSortBy = "priceLowToHigh" | "priceHighToLow" | "topRated" | "newest
 
 export interface GetAllMealsParams {
     searchTerm?: string;
+    category?: string;
     sortBy?: TSortBy | string;
     page?: string | number;
     limit?: string | number;
@@ -66,12 +67,14 @@ export const mealService = {
     ): Promise<{ data: TMeal[]; meta: TMeta; error: any }> {
 
         const searchTerm = params.searchTerm || "";
+        const category = params.category || "";
         const sortBy = params.sortBy || "";
         const page = params.page || "1";
         const limit = params.limit || "8";
 
         const query = new URLSearchParams();
         if (searchTerm.trim()) query.set("searchTerm", searchTerm.trim());
+        if (category) query.set("category", category);
         if (sortBy) query.set("sortBy", sortBy);
         query.set("page", String(page));
         query.set("limit", String(limit));

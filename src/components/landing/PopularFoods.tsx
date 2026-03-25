@@ -1,50 +1,36 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import MealCard from "@/components/layouts/MealCard";
+"use client";
 
-const mockFoods = [
-  {
-    id: 1,
-    image: "/images/hero-pasta.png",
-    category: "Biryani",
-    title: "Hyderabadi Biryani",
-    rating: 4,
-    reviews: 24,
-    price: 65.00,
-    oldPrice: 90.00
-  },
-  {
-    id: 2,
-    image: "/images/beef-steaks.png",
-    category: "Chicken",
-    title: "Daria Shevtsova",
-    rating: 5,
-    reviews: 30,
-    price: 80.00
-  },
-  {
-    id: 3,
-    image: "/images/spicy-burger.png",
-    category: "Burger",
-    title: "Spicy Burger",
-    rating: 5,
-    reviews: 17,
-    price: 100.00,
-    oldPrice: 110.00
-  },
-  {
-    id: 4,
-    image: "/images/chicken-biryani.png",
-    category: "Dressert",
-    title: "Fried Chicken",
-    rating: 4,
-    reviews: 22,
-    price: 99.00
-  }
+import { useEffect, useState } from "react";
+import MealCard from "@/components/layouts/MealCard";
+import { mealService, TMeal } from "@/services/mealService";
+
+const CATEGORIES = [
+  { label: "All Menu", value: "ALL" },
+  { label: "Burger", value: "BURGER" },
+  { label: "Chicken", value: "CHICKEN" },
+  { label: "Pizza", value: "PIZZA" },
+  { label: "Desserts", value: "DESSERTS" },
 ];
 
 export default function PopularFoods() {
+  const [activeCategory, setActiveCategory] = useState("ALL");
+  const [meals, setMeals] = useState<TMeal[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMeals = async () => {
+      setLoading(true);
+      const { data } = await mealService.getAllMeals({
+        category: activeCategory === "ALL" ? "" : activeCategory,
+        limit: 4,
+      });
+      setMeals(data);
+      setLoading(false);
+    };
+    fetchMeals();
+  }, [activeCategory]);
   return (
-    <section className="py-24 max-w-7xl mx-auto px-6">
+    <section className="py-14 max-w-7xl mx-auto px-6">
 
       {/* Top Header Row mapping exact layout: Left Title, Right Tabs */}
       <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -70,44 +56,40 @@ export default function PopularFoods() {
         <div className="flex flex-col md:items-end gap-6 w-full md:w-auto">
           {/* Main Tabs */}
           <div className="flex flex-wrap items-center gap-3 w-full justify-start md:justify-end">
-            <button className="px-6 py-2 border border-orange-500 bg-orange-500 text-white font-medium hover:bg-orange-600 transition-colors text-sm rounded-sm shrink-0">
-              All Menu
-            </button>
-            <button className="px-6 py-2 border border-orange-500 text-orange-500 bg-white font-medium hover:bg-orange-50 transition-colors text-sm rounded-sm shrink-0">
-              Burger
-            </button>
-            <button className="px-6 py-2 border border-orange-500 text-orange-500 bg-white font-medium hover:bg-orange-50 transition-colors text-sm rounded-sm shrink-0">
-              Chicken
-            </button>
-            <button className="px-6 py-2 border border-orange-500 text-orange-500 bg-white font-medium hover:bg-orange-50 transition-colors text-sm rounded-sm shrink-0">
-              Pizza
-            </button>
-            <button className="px-6 py-2 border border-orange-500 text-orange-500 bg-white font-medium hover:bg-orange-50 transition-colors text-sm rounded-sm shrink-0">
-              Dresserts
-            </button>
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.value}
+                onClick={() => setActiveCategory(cat.value)}
+                className={`px-6 py-2 border border-orange-500 font-medium transition-colors text-sm rounded-sm shrink-0 ${activeCategory === cat.value
+                    ? "bg-orange-500 text-white"
+                    : "bg-white text-orange-500 hover:bg-orange-50"
+                  }`}
+              >
+                {cat.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
       {/* Food Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
-        {mockFoods.map((food, index) => (
-          <MealCard 
-            key={food.id} 
-            index={index}
-            food={{
-              id: food.id,
-              name: food.title,
-              mainImage: food.image,
-              category: food.category,
-              rating: food.rating,
-              reviewCount: food.reviews,
-              price: food.price,
-              discountPrice: food.oldPrice
-            }} 
-          />
-        ))}
-      </div>
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="bg-slate-100 h-96 rounded-2xl animate-pulse" />
+          ))}
+        </div>
+      ) : meals.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
+          {meals.map((food, index) => (
+            <MealCard key={food.id} index={index} food={food as any} />
+          ))}
+        </div>
+      ) : (
+        <div className="py-20 text-center text-slate-500 font-medium">
+          No meals found in this category.
+        </div>
+      )}
 
     </section>
   );
