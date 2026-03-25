@@ -107,40 +107,38 @@ export default function Header() {
           </Link>
 
           {/* If Logged In */}
-          {session ? (
-            <>
-              <div className="flex items-center gap-2 text-slate-700">
+          {mounted && (
+            session ? (
+              <>
+                <div className="flex items-center gap-2 text-slate-700">
+                  <User size={20} />
+                  <span className="hidden md:block text-sm font-medium">
+                    {session.user.name}
+                  </span>
+                </div>
 
-                <User size={20} />
-
-                <span className="hidden md:block text-sm">
-                  {session.user.name}
-                </span>
-
-              </div>
-
-              <button
-                onClick={handleLogout}
-                className="hidden md:block bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-semibold shadow"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-
-            <>
-              <Link href="/login">
-                <button className="hidden md:block bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-semibold shadow">
-                  Login
+                <button
+                  onClick={handleLogout}
+                  className="hidden md:block bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full font-semibold shadow transition-all active:scale-95"
+                >
+                  Logout
                 </button>
-              </Link>
+              </>
+            ) : (
+              <>
+                <Link href="/login">
+                  <button className="hidden md:block bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-semibold shadow transition-all active:scale-95">
+                    Login
+                  </button>
+                </Link>
 
-              <Link href="/register">
-                <button className="hidden md:block bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-semibold shadow">
-                  Register
-                </button>
-              </Link>
-            </>
+                <Link href="/register">
+                  <button className="hidden md:block border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white px-6 py-2 rounded-full font-semibold transition-all active:scale-95">
+                    Register
+                  </button>
+                </Link>
+              </>
+            )
           )}
 
         </div>
