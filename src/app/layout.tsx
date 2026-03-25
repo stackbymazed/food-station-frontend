@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/layouts/Header";
 import Footer from "@/components/layouts/Footer";
 import { Toaster } from "sonner"
+import CartSync from "@/components/layouts/CartSync";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -68,6 +69,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Header/>
+        <CartSync />
         {children}
         <Footer/>
         <Toaster richColors />

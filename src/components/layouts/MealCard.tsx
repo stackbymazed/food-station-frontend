@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { Eye, Heart, Star } from "lucide-react";
+import { useCartStore } from "@/lib/store/useCartStore";
+import { toast } from "sonner";
 
 type Meal = {
     id: number;
@@ -15,6 +17,13 @@ type Meal = {
 };
 
 export default function MealCard({ food, index = 0 }: { food: Meal, index?: number }) {
+    const addItem = useCartStore((state) => state.addItem);
+
+    const handleAddToCart = () => {
+        addItem(food as any);
+        toast.success(`${food.name} added to cart!`);
+    };
+
     return (
         <div
             key={food.id}
@@ -66,7 +75,9 @@ export default function MealCard({ food, index = 0 }: { food: Meal, index?: numb
             <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between pointer-events-none">
 
                 {/* Add To Cart button taking up most space */}
-                <button className="bg-[#f97316] hover:bg-orange-600 text-white py-2.5 px-6 font-semibold text-sm transition-colors shadow-sm pointer-events-auto active:scale-95"
+                <button 
+                    onClick={handleAddToCart}
+                    className="bg-[#f97316] hover:bg-orange-600 text-white py-2.5 px-6 font-semibold text-sm transition-colors shadow-sm pointer-events-auto active:scale-95"
                     style={{ borderRadius: '0px', borderTopLeftRadius: '16px', borderBottomRightRadius: '16px' }}
                 >
                     add To Cart
