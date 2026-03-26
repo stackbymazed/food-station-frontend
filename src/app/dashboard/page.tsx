@@ -35,6 +35,7 @@ import { mealService, TMeal } from "@/services/mealService";
 import { orderService } from "@/services/orderService";
 import { toast } from "sonner";
 import MealCard from "@/components/layouts/MealCard";
+import { Role } from "@/constants/role";
 
 export default function DashboardPage() {
   const { data: session, isPending } = authClient.useSession();
@@ -127,6 +128,22 @@ export default function DashboardPage() {
     }
   };
 
+
+  const handleUpdateOrderStatus = async (orderId: string, status: string) => {
+    const loading = toast.loading(`Updating order to ${status}...`);
+    try {
+      const result = await orderService.updateOrderStatus(orderId, status);
+      if (result.success) {
+        toast.success("Order status updated", { id: loading });
+        fetchAllOrders(); // Refresh all orders list
+      } else {
+        toast.error(result.message || "Failed to update status", { id: loading });
+      }
+    } catch (err) {
+      toast.error("An error occurred", { id: loading });
+    }
+  };
+
   const handleUpdateRole = async (userId: string, role: string) => {
     const loading = toast.loading("Updating role...");
     try {
@@ -175,15 +192,17 @@ export default function DashboardPage() {
   if (!session) return null;
 
   const user = session.user;
-  const role = (user as any).role || "user";
+  const role = (user as any).role || Role.USER;
 
   const sidebarLinks = [
     { id: "overview", label: "Overview", icon: LayoutDashboard },
-    ...(role === "admin" ? [
+    ...(role === Role.ADMIN ? [
       { id: "users", label: "All Users", icon: Users },
+    ] : []),
+    ...(role === Role.ADMIN || role === Role.PROVIDER ? [
       { id: "all-orders", label: "All Orders", icon: Package },
     ] : []),
-    ...(role === "provider" || role === "admin" ? [
+    ...(role === Role.PROVIDER || role === Role.ADMIN ? [
       { id: "all-meals", label: "All Meals", icon: Utensils },
       { id: "add-meal", label: "Add New Meal", icon: PlusCircle, href: "/add-meal" },
     ] : []),
@@ -417,7 +436,7 @@ export default function DashboardPage() {
               )}
 
               {/* Users Management Tab */}
-              {activeTab === "users" && role === "admin" && (
+              {activeTab === "users" && role === Role.ADMIN && (
                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 transition-all">
                    <div className="flex items-center justify-between">
                       <div>
@@ -466,8 +485,8 @@ export default function DashboardPage() {
                                            value={u.role || "user"} 
                                            onChange={(e) => handleUpdateRole(u.id, e.target.value)}
                                            className={`bg-slate-50 border-none outline-none ring-1 ring-slate-200 py-2 px-4 rounded-xl text-xs font-black uppercase tracking-wider cursor-pointer focus:ring-orange-500 transition-all ${
-                                             u.role === "admin" ? "text-purple-600 ring-purple-100 bg-purple-50" : 
-                                             u.role === "provider" ? "text-blue-600 ring-blue-100 bg-blue-50" : "text-slate-600"
+                                             u.role === Role.ADMIN ? "text-purple-600 ring-purple-100 bg-purple-50" : 
+                                             u.role === Role.PROVIDER ? "text-blue-600 ring-blue-100 bg-blue-50" : "text-slate-600"
                                            }`}
                                          >
                                             <option value="user">User</option>
@@ -630,8 +649,8 @@ export default function DashboardPage() {
                 </div>
               )}
 
-              {/* All Orders Tab (Admin) */}
-              {activeTab === "all-orders" && role === "admin" && (
+              {/* All Orders Tab (Admin & Provider) */}
+              {activeTab === "all-orders" && (role === Role.ADMIN || role === Role.PROVIDER) && (
                 <div className="space-y-12 animate-in fade-in duration-700">
                    <div className="flex items-center justify-between">
                       <div>
@@ -669,11 +688,25 @@ export default function DashboardPage() {
                                      </div>
                                   </td>
                                   <td className="px-10 py-8 font-bold text-slate-500 text-xs">#{order.id.slice(-8)}</td>
-                                  <td className="px-10 py-8 text-center bg-slate-50/50">
-                                     <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black tracking-tighter uppercase ${
-                                       order.status === 'DELIVERED' ? 'bg-emerald-100 text-emerald-600' : 'bg-blue-100 text-blue-600'
-                                     }`}>{order.status}</span>
-                                  </td>
+                                   <td className="px-10 py-8 text-center bg-slate-50/50">
+                                      {order.status === 'PROCESSING' && (role === 'admin' || role === 'provider') ? (
+                                        <select
+                                          value={order.status}
+                                          onChange={(e) => handleUpdateOrderStatus(order.id, e.target.value)}
+                                          className="bg-white border border-slate-200 text-slate-900 text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-xl cursor-pointer hover:border-orange-500 transition-all outline-none"
+                                        >
+                                          <option value="PROCESSING">Processing</option>
+                                          <option value="ACCEPTED">Accept</option>
+                                          <option value="DELIVERED">Deliver</option>
+                                          <option value="CANCELLED">Cancel</option>
+                                        </select>
+                                      ) : (
+                                        <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black tracking-tighter uppercase ${
+                                          order.status === 'DELIVERED' ? 'bg-emerald-100 text-emerald-600' : 
+                                          order.status === 'ACCEPTED' ? 'bg-indigo-100 text-indigo-600' : 'bg-blue-100 text-blue-600'
+                                        }`}>{order.status}</span>
+                                      )}
+                                   </td>
                                   <td className="px-10 py-8">
                                      <div className="flex -space-x-3">
                                         {order.items.slice(0, 3).map((item: any, i: number) => (

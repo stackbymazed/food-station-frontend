@@ -32,6 +32,8 @@ export default function Header() {
     setMounted(true);
   }, []);
 
+  if (pathname === "/dashboard") return null;
+
   const isActive = (path: string) =>
     pathname === path ? "text-orange-500" : "text-slate-700";
 
