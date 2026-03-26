@@ -130,4 +130,28 @@ export const mealService = {
             return { data: null, error: { message: "Something went wrong" } };
         }
     },
+    /**
+     * POST /meal
+     * Create a new meal record
+     */
+    createMeal: async function (
+        data: any
+    ): Promise<{ success: boolean; data: TMeal | null; error: any }> {
+        try {
+            const res = await fetch(`${BASE_URL}/meal`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            const result = await res.json();
+
+            if (!res.ok) throw new Error(result.message || "Failed to create meal");
+
+            return { success: true, data: result.data, error: null };
+        } catch (err: any) {
+            console.error("[mealService.createMeal]", err);
+            return { success: false, data: null, error: { message: err.message || "Something went wrong" } };
+        }
+    },
 };

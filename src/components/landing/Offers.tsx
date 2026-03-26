@@ -2,7 +2,7 @@ import { ArrowRight, Utensils } from "lucide-react";
 
 export default function Offers() {
   return (
-    <section className="py-20 max-w-8xl mx-auto px-18 relative bg-[#EEF6EB]">
+    <section className="py-20 max-w-7xl mx-auto px-6 relative bg-[#EEF6EB]">
       <div className="text-left w-full md:w-auto mb-8">
         <div className="flex items-center gap-2 font-bold mb-2">
           <h4 className="text-orange-500 font-pacifico tracking-widest text-2xl">Daily Offer</h4>

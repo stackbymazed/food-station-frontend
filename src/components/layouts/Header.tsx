@@ -74,19 +74,19 @@ export default function Header() {
           <li><Link href="/" className={`${isActive("/")} hover:text-orange-500 transition-colors`}>Home</Link></li>
           <li><Link href="#" className="text-slate-700 hover:text-orange-500 transition-colors">About</Link></li>
           <li><Link href="/browse-meals" className={`${isActive("/browse-meals")} hover:text-orange-500 transition-colors`}>Menu</Link></li>
-          <li><Link href="#" className="text-slate-700 hover:text-orange-500 transition-colors">Chefs</Link></li>
+          <li><Link href="/provider" className={`${isActive("/provider")} hover:text-orange-500 transition-colors`}>Provider</Link></li>
 
           {/* Pages Dropdown - using a simple hover for now */}
-          <li className="relative group cursor-pointer">
-            <span className="text-slate-700 hover:text-orange-500 transition-colors flex items-center gap-1">
+          <li className="relative group cursor-pointer py-2">
+            <span className="text-slate-700 group-hover:text-orange-500 transition-colors flex items-center gap-1">
               Pages <Plus size={10} className="mt-0.5" />
             </span>
-            <ul className="absolute top-full left-0 w-48 bg-white shadow-xl rounded-lg py-3 hidden group-hover:block border border-slate-100 z-[100] mt-2 animate-in fade-in slide-in-from-top-2 duration-200">
-              <li><Link href="/checkout" className="block px-6 py-2 hover:bg-orange-50 hover:text-orange-500 transition-colors">Checkout</Link></li>
-              <li><Link href="/orders" className="block px-6 py-2 hover:bg-orange-50 hover:text-orange-500 transition-colors">My Orders</Link></li>
-              <li><Link href="/add-meal" className="block px-6 py-2 hover:bg-orange-50 hover:text-orange-500 transition-colors">Add Meal</Link></li>
-              <li><Link href="/provider" className="block px-6 py-2 hover:bg-orange-50 hover:text-orange-500 transition-colors">Provider</Link></li>
-            </ul>
+            <div className="absolute top-full left-0 w-48 hidden group-hover:block z-[100] pt-2">
+              <ul className="bg-white shadow-xl rounded-lg py-3 border border-slate-100 animate-in fade-in slide-in-from-top-2 duration-200">
+                <li><Link href="/cart" className="block px-6 py-2 hover:bg-orange-50 hover:text-orange-500 transition-colors">Cart</Link></li>
+                <li><Link href="/checkout" className="block px-6 py-2 hover:bg-orange-50 hover:text-orange-500 transition-colors">Checkout</Link></li>
+              </ul>
+            </div>
           </li>
 
           <li><Link href="#" className="text-slate-700 hover:text-orange-500 transition-colors">Blog</Link></li>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Eye, Heart, Star } from "lucide-react";
 import { useCartStore } from "@/lib/store/useCartStore";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type Meal = {
     id: number;
@@ -14,10 +15,13 @@ type Meal = {
     reviewCount: number;
     price: number;
     discountPrice?: number;
+    providerId?: string;
+    provider?: { name: string };
 };
 
 export default function MealCard({ food, index = 0 }: { food: Meal, index?: number }) {
     const addItem = useCartStore((state) => state.addItem);
+    const router = useRouter();
 
     const handleAddToCart = () => {
         addItem(food as any);
@@ -64,9 +68,13 @@ export default function MealCard({ food, index = 0 }: { food: Meal, index?: numb
 
                 {/* Price Container */}
                 <div className="flex items-center justify-center gap-2 pt-1 border-t border-dashed border-gray-200 w-3/4 mx-auto mt-4">
-                    <span className="text-[22px] font-bold text-[#f97316]">${food.price.toFixed(2)}</span>
-                    {food.discountPrice && (
-                        <span className="text-sm font-medium text-gray-400 line-through">${food.discountPrice.toFixed(2)}</span>
+                    {food.discountPrice ? (
+                        <>
+                            <span className="text-[22px] font-bold text-[#f97316]">${food.discountPrice.toFixed(2)}</span>
+                            <span className="text-sm font-medium text-gray-400 line-through">${food.price.toFixed(2)}</span>
+                        </>
+                    ) : (
+                        <span className="text-[22px] font-bold text-[#f97316]">${food.price.toFixed(2)}</span>
                     )}
                 </div>
             </div>
@@ -84,7 +92,10 @@ export default function MealCard({ food, index = 0 }: { food: Meal, index?: numb
                 </button>
 
                 <div className="flex items-center gap-2 pointer-events-auto pr-4 mb-2">
-                    <button className="w-9 h-9 border border-[#f97316] text-[#f97316] flex items-center justify-center hover:bg-orange-50 transition-colors shadow-sm bg-white active:scale-90"
+                    <button 
+                        onClick={() => food.providerId && router.push(`/provider/${food.providerId}`)}
+                        title={food.provider?.name || "View Provider"}
+                        className="w-9 h-9 border border-[#f97316] text-[#f97316] flex items-center justify-center hover:bg-orange-50 transition-colors shadow-sm bg-white active:scale-90"
                         style={{ borderRadius: '0px' }}
                     >
                         <Heart size={16} />

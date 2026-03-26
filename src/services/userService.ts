@@ -7,6 +7,24 @@ export const userService = {
    * GET /user
    * Fetch all users (Admin only)
    */
+  /**
+   * GET /user/providers
+   * Fetch all providers
+   */
+  getProviders: async function () {
+    try {
+      const res = await fetch(`${API_URL}/user/providers`, {
+        method: "GET",
+        cache: "no-store",
+      });
+      const result = await res.json();
+      return { data: result.data ?? [], error: null };
+    } catch (err) {
+      console.error("[userService.getProviders]", err);
+      return { data: [], error: { message: "Failed to fetch providers" } };
+    }
+  },
+
   getAllUsers: async function () {
     try {
       const res = await fetch(`${API_URL}/user`, {
