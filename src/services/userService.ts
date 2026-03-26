@@ -1,29 +1,59 @@
 import { env } from "@/env";
-import { cookies } from "next/headers";
 
-const AUTH_URL = env.BACKEND_URL;
+const API_URL = env.NEXT_PUBLIC_API_URL;
 
 export const userService = {
-  getSession: async function () {
+  /**
+   * GET /user
+   * Fetch all users (Admin only)
+   */
+  getAllUsers: async function () {
     try {
-      const cookieStore = await cookies();
-
-      const res = await fetch(`${AUTH_URL}/get-session`, {
-        headers: {
-          Cookie: cookieStore.toString(),
-        },
+      const res = await fetch(`${API_URL}/user`, {
+        method: "GET",
         cache: "no-store",
-      }); 
-
-      const session = await res.json();
-      if (session === null) {
-        return { data: null, error: { message: "Session is missing." } };
-      }
-
-      return { data: session, error: null };
+      });
+      const result = await res.json();
+      return { data: result.data ?? [], error: null };
     } catch (err) {
-      console.error(err);
-      return { data: null, error: { message: "Something Went Wrong" } };
+      console.error("[userService.getAllUsers]", err);
+      return { data: [], error: { message: "Failed to fetch users" } };
+    }
+  },
+
+  /**
+   * PATCH /user/:id
+   * Update user details or role
+   */
+  updateUser: async function (id: string, data: any) {
+    try {
+      const res = await fetch(`${API_URL}/user/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+      return { data: result.data, error: null };
+    } catch (err) {
+      console.error("[userService.updateUser]", err);
+      return { data: null, error: { message: "Failed to update user" } };
+    }
+  },
+
+  /**
+   * DELETE /user/:id
+   * Remove a user (Admin only)
+   */
+  deleteUser: async function (id: string) {
+    try {
+      const res = await fetch(`${API_URL}/user/${id}`, {
+        method: "DELETE",
+      });
+      const result = await res.json();
+      return { data: result.data, error: null };
+    } catch (err) {
+      console.error("[userService.deleteUser]", err);
+      return { data: null, error: { message: "Failed to delete user" } };
     }
   },
 };

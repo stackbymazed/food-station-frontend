@@ -10,6 +10,7 @@ export const env = createEnv({
 
   client: {
     NEXT_PUBLIC_API_URL: z.string().url(),
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1),
   },
 
   runtimeEnv: {
@@ -17,5 +18,6 @@ export const env = createEnv({
     FRONTEND_URL: process.env.FRONTEND_URL,
     API_URL: process.env.API_URL,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
   },
 });

@@ -110,12 +110,12 @@ export default function Header() {
           {mounted && (
             session ? (
               <>
-                <div className="flex items-center gap-2 text-slate-700">
+                <Link href="/dashboard" className="flex items-center gap-2 text-slate-700 hover:text-orange-500 transition-colors">
                   <User size={20} />
                   <span className="hidden md:block text-sm font-medium">
                     {session.user.name}
                   </span>
-                </div>
+                </Link>
 
                 <button
                   onClick={handleLogout}

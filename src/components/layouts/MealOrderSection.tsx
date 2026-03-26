@@ -1,10 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Minus, Plus, ShoppingCart, Heart } from "lucide-react";
+import { Minus, Plus, ShoppingCart, Wallet } from "lucide-react";
 import { TMeal } from "@/services/mealService";
+import { useCartStore } from "@/lib/store/useCartStore";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function MealOrderSection({ meal }: { meal: TMeal }) {
+    const router = useRouter();
+    const addItem = useCartStore((state) => state.addItem);
     const [quantity, setQuantity] = useState(1);
     const [selectedSize, setSelectedSize] = useState<string | null>(
         meal.options?.find(o => o.type === 'size' && o.name === 'Large')?.name || 
@@ -27,6 +32,25 @@ export default function MealOrderSection({ meal }: { meal: TMeal }) {
 
     const unitPrice = basePrice + sizePrice + addonsPrice;
     const totalPrice = unitPrice * quantity;
+
+    const handleAddToCart = (callback?: () => void) => {
+        // Create an augmented meal object with the calculated unitPrice
+        const augmentedMeal = {
+            ...meal,
+            price: unitPrice, // Pass the price including options
+        };
+
+        addItem(augmentedMeal as any, quantity);
+        toast.success(`Success! ${quantity} ${meal.name} added to your cart.`);
+        
+        if (callback) callback();
+    };
+
+    const handlePayToProceed = () => {
+        handleAddToCart(() => {
+            router.push('/checkout');
+        });
+    };
 
     return (
         <div className="flex flex-col h-full space-y-12">
@@ -140,12 +164,18 @@ export default function MealOrderSection({ meal }: { meal: TMeal }) {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                    <button className="bg-orange-600 hover:bg-slate-900 text-white font-black py-6 rounded-[32px] shadow-2xl shadow-orange-100 transition-all duration-500 active:scale-95 text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3 group">
+                    <button 
+                        onClick={() => handleAddToCart()}
+                        className="bg-orange-600 hover:bg-slate-900 text-white font-black py-6 rounded-[32px] shadow-2xl shadow-orange-100 transition-all duration-500 active:scale-95 text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3 group"
+                    >
                         <ShoppingCart size={20} className="group-hover:translate-x-1 transition-transform" />
                         Add To Cart
                     </button>
-                    <button className="border-2 border-slate-900 hover:bg-slate-900 text-slate-900 hover:text-white font-black py-6 rounded-[32px] transition-all duration-500 active:scale-95 text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3">
-                        <Heart size={20} />
+                    <button 
+                        onClick={handlePayToProceed}
+                        className="border-2 border-slate-900 hover:bg-slate-900 text-slate-900 hover:text-white font-black py-6 rounded-[32px] transition-all duration-500 active:scale-95 text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3"
+                    >
+                        <Wallet size={20} />
                         Pay to Proceed
                     </button>
                 </div>
@@ -153,3 +183,4 @@ export default function MealOrderSection({ meal }: { meal: TMeal }) {
         </div>
     );
 }
+

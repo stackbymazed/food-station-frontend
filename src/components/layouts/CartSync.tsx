@@ -15,7 +15,7 @@ export default function CartSync() {
             // Only sync once when user is logged in and has items in local cart
             if (session?.user && items.length > 0 && !hasSyncedRef.current) {
                 try {
-                    console.log("Syncing cart to backend...");
+                    // console.log("Syncing cart to backend...");
                     await cartService.syncCart(items.map(i => ({ mealId: i.id, quantity: i.quantity })));
                     hasSyncedRef.current = true;
                 } catch (err) {

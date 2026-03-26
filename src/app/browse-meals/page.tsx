@@ -26,7 +26,7 @@ export default async function BrowseMealsPage({
         page,
         limit: 8,
     });
-    console.log(meals)
+    // console.log(meals)
     const totalPage = meta?.totalPage ?? 1;
     const total = meta?.total ?? 0;
 

@@ -31,7 +31,7 @@ export default function AddMealForm() {
 
     try {
 
-      console.log(data)
+      // console.log(data)
 
       // backend api call
       // await fetch("/api/meals", { method: "POST", body: JSON.stringify(data) })

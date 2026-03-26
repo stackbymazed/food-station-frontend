@@ -40,7 +40,7 @@ export default function LoginForm() {
         email: value.email,
         password: value.password
       });
-      console.log( data, error);
+      // console.log( data, error);
       if (error) {
         toast.error(error.message, { id: loadingToast });
       }
