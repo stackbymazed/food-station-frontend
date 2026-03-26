@@ -22,8 +22,10 @@ export interface TMeal {
     rating: number;
     reviewCount: number;
     shortDescription?: string;
-    description?: string;
-    mainImage?: string;
+    mainImage: string;
+    description: string;
+    providerId?: string;
+    provider?: { name: string };
     options?: TMealOption[];
     images?: TMealImage[];
     createdAt: string;
@@ -85,10 +87,7 @@ export const mealService = {
                 cache: "no-store",
             });
 
-            // if (!res.ok) {
-            //     const errorData = await res.json();
 
-            // }
 
             const result = await res.json();
 

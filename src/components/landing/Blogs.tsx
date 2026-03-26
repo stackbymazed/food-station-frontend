@@ -4,30 +4,30 @@ export default function Blogs() {
   const latestBlogs = [
     {
       id: 1,
-      title: "Hard To Be A Chef With A Good Salary",
-      date: "10 Feb, 23",
+      title: "Mastering the Art of Sustainable Seafood",
+      date: "March 15, 2024",
       comments: "Comments (3)",
-      image: "/images/beef-steaks.png",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta obcaecati in aut",
-      authorRole: "Chef"
+      image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&q=80&w=800",
+      desc: "Inside the kitchens of three chefs who are changing the way we source our fish.",
+      authorRole: "Sustainability"
     },
     {
       id: 2,
-      title: "We Have Opened Two New Branch In",
-      date: "14 Feb, 23",
+      title: "Traditional Spices: A Culinary Journey Through India",
+      date: "March 10, 2024",
       comments: "Comments (5)",
-      image: "/images/hero-pasta.png",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta obcaecati in aut",
-      authorRole: "Manager"
+      image: "https://images.unsplash.com/photo-1596797038530-2c39fa80227e?auto=format&fit=crop&q=80&w=800",
+      desc: "Discovery the deep history and complex flavors of the spices that define regional dishes.",
+      authorRole: "Gastronomy"
     },
     {
       id: 3,
-      title: "Restaurant Native App In Google Play",
-      date: "20 Feb, 23",
+      title: "The Rise of Plant-Based Fine Dining",
+      date: "March 05, 2024",
       comments: "Comments (1)",
-      image: "/images/chicken-biryani.png",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta obcaecati in aut",
-      authorRole: "Developer"
+      image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=800",
+      desc: "How luxury restaurants are redefining vegetarian cuisine with innovative techniques.",
+      authorRole: "Trends"
     }
   ];
 
