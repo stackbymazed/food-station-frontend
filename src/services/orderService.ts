@@ -3,7 +3,9 @@ import { env } from "@/env";
 export const orderService = {
   getUserOrders: async (userId: string) => {
     try {
-      const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/order/user/${userId}`);
+      const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/order/user/${userId}`, {
+        credentials: "include"
+      });
       const result = await res.json();
       return result;
     } catch (error) {
@@ -13,7 +15,9 @@ export const orderService = {
   },
   getAllOrders: async () => {
     try {
-      const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/order`);
+      const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/order`, {
+        credentials: "include"
+      });
       const result = await res.json();
       return result;
     } catch (error) {
@@ -26,6 +30,7 @@ export const orderService = {
       const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/order/${orderId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ status }),
       });
       const result = await res.json();

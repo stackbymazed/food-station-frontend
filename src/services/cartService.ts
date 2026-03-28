@@ -8,7 +8,7 @@ export const cartService = {
             headers: {
                 "Accept": "application/json",
             },
-            // credentials: 'include' is needed for cookies with fetch
+            credentials: 'include',
             cache: 'no-store'
         });
         return res.json();
@@ -21,6 +21,7 @@ export const cartService = {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
+            credentials: 'include',
             body: JSON.stringify({ mealId, quantity })
         });
         return res.json();

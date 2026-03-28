@@ -15,6 +15,7 @@ export const userService = {
     try {
       const res = await fetch(`${API_URL}/user/providers`, {
         method: "GET",
+        credentials: "include",
         cache: "no-store",
       });
       const result = await res.json();
@@ -29,6 +30,7 @@ export const userService = {
     try {
       const res = await fetch(`${API_URL}/user`, {
         method: "GET",
+        credentials: "include",
         cache: "no-store",
       });
       const result = await res.json();
@@ -48,6 +50,7 @@ export const userService = {
       const res = await fetch(`${API_URL}/user/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(data),
       });
       const result = await res.json();
@@ -66,6 +69,7 @@ export const userService = {
     try {
       const res = await fetch(`${API_URL}/user/${id}`, {
         method: "DELETE",
+        credentials: "include",
       });
       const result = await res.json();
       return { data: result.data, error: null };

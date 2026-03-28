@@ -39,8 +39,13 @@ export default function Header() {
 
   const handleLogout = async () => {
     const loading = toast.loading("Logging out...");
-    await authClient.signOut();
-    toast.success("Logged out successfully", { id: loading });
+    try {
+      await authClient.signOut();
+      toast.success("Logged out successfully", { id: loading });
+    } catch (error) {
+      toast.error("Something went wrong", { id: loading });
+      return;
+    }
     redirect("/login");
   };
 
@@ -96,7 +101,9 @@ export default function Header() {
 
           {/* If Logged In */}
           {mounted && (
-            session ? (
+            isPending ? (
+              <div className="hidden md:block w-32 h-10 bg-slate-100 animate-pulse rounded-full" />
+            ) : session ? (
               <>
                 <Link href="/dashboard" className="flex items-center gap-2 text-slate-700 hover:text-orange-500 transition-colors">
                   <User size={20} />

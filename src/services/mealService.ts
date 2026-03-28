@@ -84,6 +84,7 @@ export const mealService = {
         try {
             const res = await fetch(`${BASE_URL}/meal?${query.toString()}`, {
                 method: "GET",
+                credentials: "include",
                 cache: "no-store",
             });
 
@@ -97,7 +98,7 @@ export const mealService = {
                 error: null,
             };
         } catch (err) {
-            console.error("[mealService.getAllMeals]", err);
+            // console.error("[mealService.getAllMeals]", err);
             return {
                 data: [],
                 meta: { total: 0, page: 1, limit: 8, totalPage: 0 },
@@ -116,6 +117,7 @@ export const mealService = {
         try {
             const res = await fetch(`${BASE_URL}/meal/${id}`, {
                 method: "GET",
+                credentials: "include",
                 cache: "no-store",
             });
 
@@ -140,6 +142,7 @@ export const mealService = {
             const res = await fetch(`${BASE_URL}/meal`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify(data),
             });
 
