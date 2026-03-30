@@ -55,7 +55,7 @@ export default function Header() {
       <div className="bg-[#f97316] text-white text-[11px] py-1.5 px-6 hidden md:block">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex gap-8">
-            <span className="flex items-center gap-1.5 opacity-90"><Mail size={12} /> examplemail@gmail.com</span>
+            <span className="flex items-center gap-1.5 opacity-90"><Mail size={12} /> mazedulislam223311@gmail.com</span>
             <span className="flex items-center gap-1.5 opacity-90"><Phone size={12} /> +96487452145214</span>
           </div>
           <div className="flex gap-4">

@@ -160,9 +160,11 @@ export default function CartPage() {
                   </button>
                 </div>
 
-                <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-black py-4 rounded-xl transition-all transform active:scale-[0.98] shadow-lg shadow-orange-500/20 uppercase tracking-widest text-sm">
-                  Checkout
-                </button>
+                <Link href="/checkout">
+                  <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-black py-4 rounded-xl transition-all transform active:scale-[0.98] shadow-lg shadow-orange-500/20 uppercase tracking-widest text-sm">
+                    Checkout
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
