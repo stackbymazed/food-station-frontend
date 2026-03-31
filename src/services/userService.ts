@@ -3,14 +3,6 @@ import { env } from "@/env";
 const API_URL = env.NEXT_PUBLIC_API_URL;
 
 export const userService = {
-  /**
-   * GET /user
-   * Fetch all users (Admin only)
-   */
-  /**
-   * GET /user/providers
-   * Fetch all providers
-   */
   getProviders: async function () {
     try {
       const res = await fetch(`${API_URL}/user/providers`, {
@@ -41,10 +33,7 @@ export const userService = {
     }
   },
 
-  /**
-   * PATCH /user/:id
-   * Update user details or role
-   */
+
   updateUser: async function (id: string, data: any) {
     try {
       const res = await fetch(`${API_URL}/user/${id}`, {
@@ -61,10 +50,7 @@ export const userService = {
     }
   },
 
-  /**
-   * DELETE /user/:id
-   * Remove a user (Admin only)
-   */
+
   deleteUser: async function (id: string) {
     try {
       const res = await fetch(`${API_URL}/user/${id}`, {
