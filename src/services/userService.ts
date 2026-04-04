@@ -13,7 +13,7 @@ export const userService = {
       const result = await res.json();
       return { data: result.data ?? [], error: null };
     } catch (err) {
-      console.error("[userService.getProviders]", err);
+      // console.error("[userService.getProviders]", err);
       return { data: [], error: { message: "Failed to fetch providers" } };
     }
   },
@@ -28,7 +28,7 @@ export const userService = {
       const result = await res.json();
       return { data: result.data ?? [], error: null };
     } catch (err) {
-      console.error("[userService.getAllUsers]", err);
+      // console.error("[userService.getAllUsers]", err);
       return { data: [], error: { message: "Failed to fetch users" } };
     }
   },
@@ -45,7 +45,7 @@ export const userService = {
       const result = await res.json();
       return { data: result.data, error: null };
     } catch (err) {
-      console.error("[userService.updateUser]", err);
+      // console.error("[userService.updateUser]", err);
       return { data: null, error: { message: "Failed to update user" } };
     }
   },
@@ -60,7 +60,7 @@ export const userService = {
       const result = await res.json();
       return { data: result.data, error: null };
     } catch (err) {
-      console.error("[userService.deleteUser]", err);
+      // console.error("[userService.deleteUser]", err);
       return { data: null, error: { message: "Failed to delete user" } };
     }
   },

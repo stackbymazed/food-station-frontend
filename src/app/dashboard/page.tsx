@@ -31,6 +31,7 @@ import MyOrdersTab from "@/components/dashboard/MyOrdersTab";
 import GlobalOrdersTab from "@/components/dashboard/GlobalOrdersTab";
 import DeleteUserModal from "@/components/dashboard/DeleteUserModal";
 import SettingsTab from "@/components/dashboard/SettingsTab";
+import GlobalLoader from "@/components/loader/GlobalLoader";
 
 export default function DashboardPage() {
   const { data: session, isPending } = authClient.useSession();
@@ -196,11 +197,7 @@ export default function DashboardPage() {
   };
 
   if (!mounted || isPending || !session) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
+    return <GlobalLoader />;
   }
 
   const user = session.user;

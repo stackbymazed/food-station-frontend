@@ -8,7 +8,7 @@ export const statsService = {
             });
             return await res.json();
         } catch (error) {
-            console.error("Failed to fetch admin stats:", error);
+            // console.error("Failed to fetch admin stats:", error);
             return { success: false };
         }
     },
@@ -19,7 +19,7 @@ export const statsService = {
             });
             return await res.json();
         } catch (error) {
-            console.error("Failed to fetch provider stats:", error);
+            // console.error("Failed to fetch provider stats:", error);
             return { success: false };
         }
     },
@@ -30,7 +30,7 @@ export const statsService = {
             });
             return await res.json();
         } catch (error) {
-            console.error("Failed to fetch user stats:", error);
+            // console.error("Failed to fetch user stats:", error);
             return { success: false };
         }
     },

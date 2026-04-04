@@ -1,9 +1,10 @@
 "use client";
 
-import { PlusCircle, Loader2, Utensils, ChevronRight } from "lucide-react";
+import { PlusCircle, Utensils, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import MealCard from "@/components/layouts/MealCard";
 import { TMeal } from "@/services/mealService";
+import LocalLoader from "../loader/LocalLoader";
 
 interface AllMealsTabProps {
     meals: TMeal[];
@@ -28,10 +29,10 @@ export default function AllMealsTab({ meals, loadingMeals, setActiveTab }: AllMe
             </div>
 
             {loadingMeals ? (
-                <div className="min-h-[400px] flex flex-col items-center justify-center">
-                    <Loader2 className="w-12 h-12 text-orange-500 animate-spin mb-4" />
-                    <p className="text-slate-400 font-bold animate-pulse">Fetching the best recipes...</p>
-                </div>
+                <LocalLoader
+                    message="Cooking up the best recipes..."
+                    variant="orange"
+                />
             ) : meals.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12">
                     {meals.map((meal) => (

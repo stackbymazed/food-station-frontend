@@ -3,6 +3,7 @@
 import { TrendingUp, CheckCircle2, XCircle, Trash2 } from "lucide-react";
 import { Role } from "@/constants/role";
 import { useState } from "react";
+import LocalLoader from "../loader/LocalLoader";
 import ConfirmationModal from "./ConfirmationModal";
 
 interface UserManagementTabProps {
@@ -72,11 +73,7 @@ export default function UserManagementTab({
                         </thead>
                         <tbody className="divide-y divide-slate-50 font-medium">
                             {loadingUsers ? (
-                                [1, 2, 3].map(i => (
-                                    <tr key={i} className="animate-pulse">
-                                        <td colSpan={4} className="px-10 py-8 bg-slate-50/30"></td>
-                                    </tr>
-                                ))
+                                <tr><td colSpan={4}><LocalLoader message="Retrieving user database..." variant="orange" /></td></tr>
                             ) : users.length > 0 ? (
                                 users.map((u) => (
                                     <tr key={u.id} className="hover:bg-slate-50 transition-colors">

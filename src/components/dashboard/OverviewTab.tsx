@@ -45,7 +45,7 @@ export default function OverviewTab({ role, setActiveTab, userId }: OverviewTabP
 
             if (res.success) setStats(res.data);
         } catch (err) {
-            console.error("Failed to fetch stats", err);
+            // console.error("Failed to fetch stats", err);
         } finally {
             setLoading(false);
         }

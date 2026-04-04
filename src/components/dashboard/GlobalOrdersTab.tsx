@@ -1,6 +1,7 @@
 "use client";
 
-import { TrendingUp, Loader2 } from "lucide-react";
+import { TrendingUp } from "lucide-react";
+import LocalLoader from "../loader/LocalLoader";
 import { useState } from "react";
 import ConfirmationModal from "./ConfirmationModal";
 
@@ -63,7 +64,7 @@ export default function GlobalOrdersTab({
                     </thead>
                     <tbody className="divide-y divide-slate-50">
                         {loadingOrders ? (
-                            [1, 2, 3].map(i => <tr key={i} className="animate-pulse"><td colSpan={5} className="px-10 py-8 bg-slate-50/30"></td></tr>)
+                            <tr><td colSpan={5}><LocalLoader message="Syncing global orders..." variant="slate" /></td></tr>
                         ) : allOrders.map((order) => (
                             <tr key={order.id} className="hover:bg-slate-50/50 transition-colors">
                                 <td className="px-10 py-8">

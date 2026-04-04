@@ -110,12 +110,20 @@ export default function Header() {
               isPending ? (
                 <div className="w-8 h-8 bg-slate-100 animate-pulse rounded-full" />
               ) : session ? (
-                <Link href="/dashboard" className="flex items-center gap-2 text-slate-700 hover:text-orange-500 transition-colors">
-                  <User size={22} className="lg:w-5 lg:h-5" />
-                  <span className="hidden lg:block text-sm font-medium">
-                    {session.user.name}
-                  </span>
-                </Link>
+                <div className="flex items-center gap-4">
+                  <Link href="/dashboard" className="flex items-center gap-2 text-slate-700 hover:text-orange-500 transition-colors">
+                    <User size={22} className="lg:w-5 lg:h-5" />
+                    <span className="hidden lg:block text-sm font-medium">
+                      {session.user.name}
+                    </span>
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="hidden lg:block text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors border border-slate-100 px-3 py-1.5 rounded-xl hover:bg-red-50 hover:border-red-100"
+                  >
+                    Logout
+                  </button>
+                </div>
               ) : (
                 <Link href="/login" className="lg:block">
                   <button className="hidden lg:block bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-semibold shadow transition-all active:scale-95">
