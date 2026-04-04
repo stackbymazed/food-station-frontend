@@ -4,8 +4,8 @@ import MealCard from "@/components/layouts/MealCard";
 import MealOrderSection from "@/components/layouts/MealOrderSection";
 import InteractiveGallery from "@/components/layouts/InteractiveGallery";
 import ContentTabs from "@/components/layouts/ContentTabs";
-import { 
-    Star, 
+import {
+    Star,
     ChevronRight,
     Home,
     ChevronLeft,
@@ -23,10 +23,10 @@ interface Props {
 
 export default async function MealDetailsPage({ params }: Props) {
     const { id } = await params;
-    
+
     // Fetch meal details
     const { data: meal, error } = await mealService.getSingleMeal(Number(id));
-    
+
     if (error || !meal) {
         notFound();
     }
@@ -48,19 +48,19 @@ export default async function MealDetailsPage({ params }: Props) {
             {/* ── Immersive Banner Section ─────────────────────── */}
             <div className="relative h-[200px] md:h-[350px] w-full flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-transparent z-10" />
-                <img 
-                    src={meal.mainImage} 
-                    alt="Banner" 
-                    className="absolute inset-0 w-full h-full object-cover scale-110 blur-md opacity-30" 
+                <img
+                    src={meal.mainImage}
+                    alt="Banner"
+                    className="absolute inset-0 w-full h-full object-cover scale-110 blur-md opacity-30"
                 />
-                
+
                 <div className="relative z-20 text-center px-6 max-w-4xl animate-in fade-in slide-in-from-top-4 duration-700">
                     <div className="flex items-center justify-center gap-2 mb-4">
                         <span className="h-[2px] w-8 bg-orange-500 rounded-full"></span>
                         <h4 className="text-orange-500 font-pacifico text-3xl tracking-wide">Menu Details</h4>
                         <span className="h-[2px] w-8 bg-orange-500 rounded-full"></span>
                     </div>
-                    
+
                     <h1 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter drop-shadow-2xl">
                         {meal.name}
                     </h1>
@@ -78,14 +78,14 @@ export default async function MealDetailsPage({ params }: Props) {
             {/* ── Main Content Grid ─────────────────────── */}
             <div className="max-w-7xl mx-auto px-6 -mt-16 md:-mt-24 relative z-30">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-                    
+
                     {/* Left & Middle Area (8 columns) */}
                     <div className="lg:col-span-8 space-y-12">
-                        
+
                         {/* 1. Main Details Overview Card */}
                         <div className="bg-white rounded-[40px] md:rounded-[50px] shadow-[0_40px_100px_rgba(0,0,0,0.03)] border border-gray-100/50 p-8 md:p-12 lg:p-14 overflow-hidden relative">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 blur-[100px] -mr-32 -mt-32 rounded-full" />
-                            
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
                                 {/* Interactive Image Gallery */}
                                 <InteractiveGallery mainImage={meal.mainImage} images={meal.images} />
@@ -102,11 +102,11 @@ export default async function MealDetailsPage({ params }: Props) {
                                             <span className="text-xs text-slate-400 font-bold ml-1">({meal.reviewCount})</span>
                                         </div>
                                     </div>
-                                    
+
                                     <h2 className="text-4xl lg:text-5xl font-black text-slate-900 mb-6 leading-[1.1] tracking-tight">
                                         {meal.name}
                                     </h2>
-                                    
+
                                     <div className="flex items-baseline gap-4 mb-8">
                                         <span className="text-5xl font-black text-orange-600 tracking-tighter">
                                             ${meal.price.toFixed(2)}
@@ -141,9 +141,9 @@ export default async function MealDetailsPage({ params }: Props) {
                         </div>
 
                         {/* 2. Interactive Content Tabs (Description/Reviews) */}
-                        <ContentTabs 
-                            description={meal.description || `Indulge in a masterpiece of culinary art. Our ${meal.name} is more than just a meal; it is a celebration of flavors crafted with the finest ingredients.`} 
-                            reviewCount={meal.reviewCount} 
+                        <ContentTabs
+                            description={meal.description || `Indulge in a masterpiece of culinary art. Our ${meal.name} is more than just a meal; it is a celebration of flavors crafted with the finest ingredients.`}
+                            reviewCount={meal.reviewCount}
                         />
 
                         {/* 3. Additional Quality Indicators Grid */}
@@ -196,7 +196,7 @@ export default async function MealDetailsPage({ params }: Props) {
                         <div className="bg-white rounded-[40px] shadow-[0_50px_100px_rgba(0,0,0,0.05)] border border-gray-100 p-10 overflow-hidden relative group">
                             <div className="absolute top-0 left-0 w-2 h-full bg-orange-600 transition-all duration-500 group-hover:w-4" />
                             <div className="flex items-center gap-3 mb-10">
-                                <Link 
+                                <Link
                                     href="/browse-meals"
                                     className="w-12 h-12 bg-slate-50 text-slate-400 rounded-[18px] flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all duration-300"
                                 >
@@ -206,7 +206,7 @@ export default async function MealDetailsPage({ params }: Props) {
                             </div>
 
                             <MealOrderSection meal={meal} />
-                            
+
                             <div className="mt-12 flex items-center gap-6 p-6 bg-[#FAFAFA] rounded-[30px] border border-slate-100">
                                 <div className="w-14 h-14 bg-emerald-100/50 text-emerald-600 rounded-2xl flex items-center justify-center">
                                     <Leaf size={28} />
@@ -253,7 +253,7 @@ export default async function MealDetailsPage({ params }: Props) {
                                 Explore More <span className="text-orange-500">Specialties</span>
                             </h3>
                         </div>
-                        <Link 
+                        <Link
                             href="/browse-meals"
                             className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 hover:text-orange-500 transition-colors flex items-center gap-3"
                         >
@@ -263,8 +263,8 @@ export default async function MealDetailsPage({ params }: Props) {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         {relatedMeals.map((m, idx) => (
-                            <MealCard 
-                                key={m.id} 
+                            <MealCard
+                                key={m.id}
                                 index={idx}
                                 food={{
                                     id: m.id,
@@ -275,7 +275,7 @@ export default async function MealDetailsPage({ params }: Props) {
                                     reviewCount: m.reviewCount,
                                     price: m.price,
                                     discountPrice: m.discountPrice
-                                }} 
+                                }}
                             />
                         ))}
                     </div>

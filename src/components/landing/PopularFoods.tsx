@@ -54,15 +54,15 @@ export default function PopularFoods() {
 
         {/* Right Aligned Tabs and Navigation Container */}
         <div className="flex flex-col md:items-end gap-6 w-full md:w-auto">
-          {/* Main Tabs */}
-          <div className="flex flex-wrap items-center gap-3 w-full justify-start md:justify-end">
+          {/* Main Tabs - Scrollable on mobile */}
+          <div className="flex items-center gap-3 w-full justify-start md:justify-end overflow-x-auto pb-2 scrollbar-none no-scrollbar">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.value}
                 onClick={() => setActiveCategory(cat.value)}
-                className={`px-6 py-2 border border-orange-500 font-medium transition-colors text-sm rounded-sm shrink-0 ${activeCategory === cat.value
-                    ? "bg-orange-500 text-white"
-                    : "bg-white text-orange-500 hover:bg-orange-50"
+                className={`px-6 py-2.5 border border-orange-500 font-bold transition-all text-xs sm:text-sm rounded-full shrink-0 whitespace-nowrap active:scale-95 ${activeCategory === cat.value
+                  ? "bg-orange-500 text-white shadow-lg shadow-orange-100"
+                  : "bg-white text-orange-500 hover:bg-orange-50"
                   }`}
               >
                 {cat.label}
@@ -74,13 +74,13 @@ export default function PopularFoods() {
 
       {/* Food Grid */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-slate-100 h-96 rounded-2xl animate-pulse" />
+            <div key={i} className="bg-slate-100 h-64 sm:h-96 rounded-2xl animate-pulse" />
           ))}
         </div>
       ) : meals.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8">
           {meals.map((food, index) => (
             <MealCard key={food.id} index={index} food={food as any} />
           ))}

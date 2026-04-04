@@ -40,4 +40,17 @@ export const orderService = {
       return { success: false, message: "Network error" };
     }
   },
+  deleteOrder: async (orderId: string) => {
+    try {
+      const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/order/${orderId}`, {
+        method: "DELETE",
+        credentials: "include"
+      });
+      const result = await res.json();
+      return result;
+    } catch (error) {
+      console.error("Failed to delete order:", error);
+      return { success: false, message: "Network error" };
+    }
+  },
 };

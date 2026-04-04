@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { 
-  Users, 
-  ShoppingBag, 
-  Utensils, 
-  Settings, 
+import {
+  Users,
+  ShoppingBag,
+  Utensils,
+  Settings,
   LayoutDashboard,
   Package,
   PlusCircle,
@@ -29,6 +29,7 @@ import AddMealTab from "@/components/dashboard/AddMealTab";
 import MyOrdersTab from "@/components/dashboard/MyOrdersTab";
 import GlobalOrdersTab from "@/components/dashboard/GlobalOrdersTab";
 import DeleteUserModal from "@/components/dashboard/DeleteUserModal";
+import SettingsTab from "@/components/dashboard/SettingsTab";
 
 export default function DashboardPage() {
   const { data: session, isPending } = authClient.useSession();
@@ -178,8 +179,8 @@ export default function DashboardPage() {
     ...(role === Role.ADMIN ? [{ id: "users", label: "All Users", icon: Users }] : []),
     ...(role === Role.ADMIN || role === Role.PROVIDER ? [{ id: "all-orders", label: "All Orders", icon: Package }] : []),
     ...(role === Role.PROVIDER || role === Role.ADMIN ? [
-        { id: "all-meals", label: "All Meals", icon: Utensils },
-        { id: "add-meal", label: "Add New Meal", icon: PlusCircle },
+      { id: "all-meals", label: "All Meals", icon: Utensils },
+      { id: "add-meal", label: "Add New Meal", icon: PlusCircle },
     ] : []),
     { id: "orders", label: "My Orders", icon: ShoppingBag },
     { id: "settings", label: "Settings", icon: Settings },
@@ -188,87 +189,91 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-[#f8fafc] flex font-outfit">
       {deleteConfirm && (
-        <DeleteUserModal 
-          onCancel={() => setDeleteConfirm(null)} 
-          onDelete={handleDeleteUser} 
+        <DeleteUserModal
+          onCancel={() => setDeleteConfirm(null)}
+          onDelete={handleDeleteUser}
         />
       )}
 
-      <DashboardSidebar 
-        sidebarLinks={sidebarLinks} 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
+      <DashboardSidebar
+        sidebarLinks={sidebarLinks}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
       />
 
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         <DashboardHeader user={user} role={role} />
 
         <main className="flex-1 overflow-y-auto p-8 lg:p-12 space-y-12">
-           <section className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-              {activeTab === "overview" && (
-                <OverviewTab role={role} setActiveTab={setActiveTab} />
-              )}
+          <section className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {activeTab === "overview" && (
+              <OverviewTab role={role} setActiveTab={setActiveTab} />
+            )}
 
-              {activeTab === "users" && role === Role.ADMIN && (
-                <UserManagementTab 
-                    users={users}
-                    loadingUsers={loadingUsers}
-                    fetchUsers={fetchUsers}
-                    handleUpdateRole={handleUpdateRole}
-                    handleUpdateStatus={handleUpdateStatus}
-                    setDeleteConfirm={setDeleteConfirm}
-                />
-              )}
+            {activeTab === "users" && role === Role.ADMIN && (
+              <UserManagementTab
+                users={users}
+                loadingUsers={loadingUsers}
+                fetchUsers={fetchUsers}
+                handleUpdateRole={handleUpdateRole}
+                handleUpdateStatus={handleUpdateStatus}
+                setDeleteConfirm={setDeleteConfirm}
+              />
+            )}
 
-              {activeTab === "all-meals" && (
-                <AllMealsTab 
-                    meals={meals}
-                    loadingMeals={loadingMeals}
-                    setActiveTab={setActiveTab}
-                />
-              )}
+            {activeTab === "all-meals" && (
+              <AllMealsTab
+                meals={meals}
+                loadingMeals={loadingMeals}
+                setActiveTab={setActiveTab}
+              />
+            )}
 
-              {activeTab === "add-meal" && (role === Role.ADMIN || role === Role.PROVIDER) && (
-                <AddMealTab 
-                    session={session}
-                    setActiveTab={setActiveTab}
-                    fetchMeals={fetchMeals}
-                />
-              )}
+            {activeTab === "add-meal" && (role === Role.ADMIN || role === Role.PROVIDER) && (
+              <AddMealTab
+                session={session}
+                setActiveTab={setActiveTab}
+                fetchMeals={fetchMeals}
+              />
+            )}
 
-              {activeTab === "orders" && (
-                <MyOrdersTab 
-                    myOrders={myOrders}
-                    loadingOrders={loadingOrders}
-                    fetchMyOrders={fetchMyOrders}
-                />
-              )}
+            {activeTab === "orders" && (
+              <MyOrdersTab
+                myOrders={myOrders}
+                loadingOrders={loadingOrders}
+                fetchMyOrders={fetchMyOrders}
+              />
+            )}
 
-              {activeTab === "all-orders" && (role === Role.ADMIN || role === Role.PROVIDER) && (
-                <GlobalOrdersTab 
-                    allOrders={allOrders}
-                    loadingOrders={loadingOrders}
-                    fetchAllOrders={fetchAllOrders}
-                    handleUpdateOrderStatus={handleUpdateOrderStatus}
-                    role={role}
-                />
-              )}
+            {activeTab === "all-orders" && (role === Role.ADMIN || role === Role.PROVIDER) && (
+              <GlobalOrdersTab
+                allOrders={allOrders}
+                loadingOrders={loadingOrders}
+                fetchAllOrders={fetchAllOrders}
+                handleUpdateOrderStatus={handleUpdateOrderStatus}
+                role={role}
+              />
+            )}
 
-              {/* Placeholder for other tabs */}
-              {activeTab !== "overview" && activeTab !== "users" && activeTab !== "all-meals" && 
-               activeTab !== "add-meal" && activeTab !== "orders" && activeTab !== "all-orders" && (
+            {activeTab === "settings" && (
+              <SettingsTab user={user} />
+            )}
+
+            {/* Placeholder for other tabs */}
+            {activeTab !== "overview" && activeTab !== "users" && activeTab !== "all-meals" &&
+              activeTab !== "add-meal" && activeTab !== "orders" && activeTab !== "all-orders" && activeTab !== "settings" && (
                 <div className="min-h-[60vh] flex flex-col items-center justify-center text-center space-y-6">
-                   <div className="w-24 h-24 bg-slate-100 rounded-[32px] flex items-center justify-center text-slate-300">
-                      <LayoutDashboard size={48} />
-                   </div>
-                   <div>
-                      <h3 className="text-2xl font-black text-slate-900 mb-2">Modules Loading...</h3>
-                      <p className="text-slate-500 max-w-sm font-medium">This module ({activeTab}) is currently under development.</p>
-                   </div>
-                   <button onClick={() => setActiveTab("overview")} className="text-orange-500 font-black flex items-center gap-2">Return Home <ChevronRight size={18} /></button>
+                  <div className="w-24 h-24 bg-slate-100 rounded-[32px] flex items-center justify-center text-slate-300">
+                    <LayoutDashboard size={48} />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-black text-slate-900 mb-2">Modules Loading...</h3>
+                    <p className="text-slate-500 max-w-sm font-medium">This module ({activeTab}) is currently under development.</p>
+                  </div>
+                  <button onClick={() => setActiveTab("overview")} className="text-orange-500 font-black flex items-center gap-2">Return Home <ChevronRight size={18} /></button>
                 </div>
               )}
-           </section>
+          </section>
         </main>
       </div>
     </div>

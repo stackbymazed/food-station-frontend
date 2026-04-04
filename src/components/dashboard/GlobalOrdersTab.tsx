@@ -1,6 +1,8 @@
 "use client";
 
 import { TrendingUp, Loader2 } from "lucide-react";
+import { useState } from "react";
+import ConfirmationModal from "./ConfirmationModal";
 
 interface GlobalOrdersTabProps {
     allOrders: any[];
@@ -17,8 +19,27 @@ export default function GlobalOrdersTab({
     handleUpdateOrderStatus,
     role
 }: GlobalOrdersTabProps) {
+    const [confirmUpdate, setConfirmUpdate] = useState<{ id: string, status: string } | null>(null);
+
+    const onConfirmStatusUpdate = () => {
+        if (confirmUpdate) {
+            handleUpdateOrderStatus(confirmUpdate.id, confirmUpdate.status);
+            setConfirmUpdate(null);
+        }
+    };
+
     return (
         <div className="space-y-12 animate-in fade-in duration-700">
+            {confirmUpdate && (
+                <ConfirmationModal
+                    onCancel={() => setConfirmUpdate(null)}
+                    onConfirm={onConfirmStatusUpdate}
+                    title="Change Order Status?"
+                    message={`Are you sure you want to change this order status to ${confirmUpdate.status}? This will notify the customer.`}
+                    confirmText="Update Status"
+                    type="warning"
+                />
+            )}
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-4xl font-black text-slate-900 tracking-tighter">Global Orders</h2>
@@ -55,21 +76,31 @@ export default function GlobalOrdersTab({
                                     </div>
                                 </td>
                                 <td className="px-10 py-8 font-bold text-slate-500 text-xs">#{order.id.slice(-8)}</td>
-                                <td className="px-10 py-8 text-center bg-slate-50/50">
-                                    {order.status === 'PROCESSING' && (role === 'admin' || role === 'provider') ? (
+                                <td className="px-10 py-8 text-center">
+                                    {(role === 'admin' || role === 'provider') ? (
                                         <select
                                             value={order.status}
-                                            onChange={(e) => handleUpdateOrderStatus(order.id, e.target.value)}
-                                            className="bg-white border border-slate-200 text-slate-900 text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-xl cursor-pointer hover:border-orange-500 transition-all outline-none"
+                                            onChange={(e) => setConfirmUpdate({ id: order.id, status: e.target.value })}
+                                            className={`border text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl cursor-pointer transition-all outline-none shadow-sm
+                                                ${order.status === 'DELIVERED' ? 'bg-emerald-50 border-emerald-200 text-emerald-600' :
+                                                    order.status === 'CANCELLED' ? 'bg-red-50 border-red-200 text-red-600' :
+                                                        order.status === 'ACCEPTED' ? 'bg-indigo-50 border-indigo-200 text-indigo-600' :
+                                                            order.status === 'PROCESSING' ? 'bg-blue-50 border-blue-200 text-blue-600' :
+                                                                'bg-orange-50 border-orange-200 text-orange-600'
+                                                }`}
                                         >
+                                            <option value="PENDING">Pending</option>
                                             <option value="PROCESSING">Processing</option>
-                                            <option value="ACCEPTED">Accept</option>
-                                            <option value="DELIVERED">Deliver</option>
-                                            <option value="CANCELLED">Cancel</option>
+                                            <option value="ACCEPTED">Accepted</option>
+                                            <option value="DELIVERED">Delivered</option>
+                                            <option value="CANCELLED">Cancelled</option>
                                         </select>
                                     ) : (
-                                        <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black tracking-tighter uppercase ${order.status === 'DELIVERED' ? 'bg-emerald-100 text-emerald-600' :
-                                                order.status === 'ACCEPTED' ? 'bg-indigo-100 text-indigo-600' : 'bg-blue-100 text-blue-600'
+                                        <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black tracking-widest uppercase ${order.status === 'DELIVERED' ? 'bg-emerald-100 text-emerald-600' :
+                                            order.status === 'CANCELLED' ? 'bg-red-100 text-red-600' :
+                                                order.status === 'ACCEPTED' ? 'bg-indigo-100 text-indigo-600' :
+                                                    order.status === 'PROCESSING' ? 'bg-blue-100 text-blue-600' :
+                                                        'bg-orange-100 text-orange-600'
                                             }`}>{order.status}</span>
                                     )}
                                 </td>
