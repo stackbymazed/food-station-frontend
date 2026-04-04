@@ -2,6 +2,8 @@
 
 import { TrendingUp, CheckCircle2, XCircle, Trash2 } from "lucide-react";
 import { Role } from "@/constants/role";
+import { useState } from "react";
+import ConfirmationModal from "./ConfirmationModal";
 
 interface UserManagementTabProps {
     users: any[];
@@ -20,8 +22,30 @@ export default function UserManagementTab({
     handleUpdateStatus,
     setDeleteConfirm,
 }: UserManagementTabProps) {
+    const [confirmChange, setConfirmChange] = useState<{ id: string, type: 'role' | 'status', value: string } | null>(null);
+
+    const onConfirmUpdate = () => {
+        if (!confirmChange) return;
+        if (confirmChange.type === 'role') {
+            handleUpdateRole(confirmChange.id, confirmChange.value);
+        } else {
+            handleUpdateStatus(confirmChange.id, confirmChange.value);
+        }
+        setConfirmChange(null);
+    };
+
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 transition-all">
+            {confirmChange && (
+                <ConfirmationModal
+                    onCancel={() => setConfirmChange(null)}
+                    onConfirm={onConfirmUpdate}
+                    title={confirmChange.type === 'role' ? "Change User Role?" : "Update User Status?"}
+                    message={`Are you sure you want to change this user's ${confirmChange.type} to ${confirmChange.value}? This might affect their access permissions.`}
+                    confirmText="Update Now"
+                    type="warning"
+                />
+            )}
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-4xl font-black text-slate-900 tracking-tight">User Management</h2>
@@ -70,9 +94,9 @@ export default function UserManagementTab({
                                         <td className="px-10 py-6">
                                             <select
                                                 value={u.role || "user"}
-                                                onChange={(e) => handleUpdateRole(u.id, e.target.value)}
+                                                onChange={(e) => setConfirmChange({ id: u.id, type: 'role', value: e.target.value })}
                                                 className={`bg-slate-50 border-none outline-none ring-1 ring-slate-200 py-2 px-4 rounded-xl text-xs font-black uppercase tracking-wider cursor-pointer focus:ring-orange-500 transition-all ${u.role === Role.ADMIN ? "text-purple-600 ring-purple-100 bg-purple-50" :
-                                                        u.role === Role.PROVIDER ? "text-blue-600 ring-blue-100 bg-blue-50" : "text-slate-600"
+                                                    u.role === Role.PROVIDER ? "text-blue-600 ring-blue-100 bg-blue-50" : "text-slate-600"
                                                     }`}
                                             >
                                                 <option value="user">User</option>
@@ -85,7 +109,7 @@ export default function UserManagementTab({
                                                 {u.status === "active" ? <CheckCircle2 size={16} className="text-green-500" /> : <XCircle size={16} className="text-red-400" />}
                                                 <select
                                                     value={u.status || "active"}
-                                                    onChange={(e) => handleUpdateStatus(u.id, e.target.value)}
+                                                    onChange={(e) => setConfirmChange({ id: u.id, type: 'status', value: e.target.value })}
                                                     className="bg-transparent border-none outline-none text-xs font-bold text-slate-600 cursor-pointer hover:text-orange-500 transition-colors"
                                                 >
                                                     <option value="active">Active</option>

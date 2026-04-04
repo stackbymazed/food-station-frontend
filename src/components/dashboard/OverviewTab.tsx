@@ -1,118 +1,197 @@
 "use client";
 
-import { TrendingUp, Users, ShoppingBag, Star, PlusCircle, ChevronRight } from "lucide-react";
-import Link from "next/link";
+import { useEffect, useState } from "react";
+import { TrendingUp, Users, ShoppingBag, Star, PlusCircle, Loader2, DollarSign, Utensils, ChevronRight } from "lucide-react";
 import { Role } from "@/constants/role";
+import { statsService } from "@/services/statsService";
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+    AreaChart,
+    Area,
+    PieChart,
+    Pie,
+    Cell
+} from 'recharts';
 
 interface OverviewTabProps {
     role: string;
     setActiveTab: (tab: string) => void;
+    userId: string;
 }
 
-export default function OverviewTab({ role, setActiveTab }: OverviewTabProps) {
+const COLORS = ['#f97316', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'];
+
+export default function OverviewTab({ role, setActiveTab, userId }: OverviewTabProps) {
+    const [stats, setStats] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetchStats();
+    }, [role, userId]);
+
+    const fetchStats = async () => {
+        setLoading(true);
+        try {
+            let res;
+            if (role === Role.ADMIN) res = await statsService.getAdminStats();
+            else if (role === Role.PROVIDER) res = await statsService.getProviderStats(userId);
+            else res = await statsService.getUserStats(userId);
+
+            if (res.success) setStats(res.data);
+        } catch (err) {
+            console.error("Failed to fetch stats", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="min-h-[400px] flex flex-col items-center justify-center">
+                <Loader2 className="w-12 h-12 text-orange-500 animate-spin mb-4" />
+                <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Loading Analytics...</p>
+            </div>
+        );
+    }
+
+    const adminMetrics = [
+        { label: "Total Revenue", val: `$${stats?.totalRevenue?.toFixed(2) || "0.00"}`, icon: DollarSign, color: "text-green-600", bg: "bg-green-50" },
+        { label: "Total Users", val: stats?.totalUsers || 0, icon: Users, color: "text-blue-600", bg: "bg-blue-50" },
+        { label: "Total Orders", val: stats?.totalOrders || 0, icon: ShoppingBag, color: "text-orange-600", bg: "bg-orange-50" },
+    ];
+
+    const providerMetrics = [
+        { label: "My Revenue", val: `$${stats?.providerRevenue?.toFixed(2) || "0.00"}`, icon: DollarSign, color: "text-green-600", bg: "bg-green-50" },
+        { label: "My Orders", val: stats?.providerOrdersCount || 0, icon: ShoppingBag, color: "text-blue-600", bg: "bg-blue-50" },
+        { label: "Active Meals", val: stats?.providerMealsCount || 0, icon: Utensils, color: "text-orange-600", bg: "bg-orange-50" },
+    ];
+
+    const userMetrics = [
+        { label: "Total Spent", val: `$${stats?.totalSpent?.toFixed(2) || "0.00"}`, icon: DollarSign, color: "text-green-600", bg: "bg-green-50" },
+        { label: "My Orders", val: stats?.ordersCount || 0, icon: ShoppingBag, color: "text-blue-600", bg: "bg-blue-50" },
+    ];
+
+    const currentMetrics = role === Role.ADMIN ? adminMetrics : role === Role.PROVIDER ? providerMetrics : userMetrics;
+    const chartData = stats?.dailyRevenue || stats?.dailySpending || [];
+
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            {/* Overview Tab Content */}
-            <div className="lg:col-span-2 space-y-12">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h2 className="text-4xl font-black text-slate-900 tracking-tight">System Overview</h2>
-                        <p className="text-slate-500 font-medium">Monitoring real-time performance and metrics.</p>
-                    </div>
-                    <div className="flex gap-2">
-                        <button className="px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-600 shadow-sm">Monthly</button>
-                        <button className="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold shadow-lg shadow-black/10">Weekly</button>
-                    </div>
-                </div>
+        <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
 
-                {/* Stats */}
-                <div className="grid md:grid-cols-3 gap-6">
-                    {[
-                        { label: "Gross Revenue", val: "$24,580.00", change: "+12.5%", icon: TrendingUp, color: "text-green-600", bg: "bg-green-50" },
-                        { label: "New Customers", val: "1,240", change: "+8.2%", icon: Users, color: "text-blue-600", bg: "bg-blue-50" },
-                        { label: "Active Orders", val: "842", change: "+24.1%", icon: ShoppingBag, color: "text-orange-600", bg: "bg-orange-50" },
-                    ].map((item, i) => (
-                        <div key={i} className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm relative overflow-hidden group">
-                            <div className={`w-14 h-14 ${item.bg} ${item.color} rounded-2xl flex items-center justify-center mb-6`}>
-                                <item.icon size={24} />
-                            </div>
-                            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">{item.label}</p>
-                            <div className="flex items-end gap-3">
-                                <h3 className="text-2xl font-black text-slate-900 leading-none">{item.val}</h3>
-                                <span className={`text-[10px] font-black ${item.color} mb-1`}>{item.change}</span>
-                            </div>
-                        </div>
-                    ))}
+            {/* Header */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <h2 className="text-4xl font-black text-slate-900 tracking-tighter capitalize">{role} Dashboard</h2>
+                    <p className="text-slate-500 font-medium">Welcome back! Here's what's happening with your account.</p>
                 </div>
-
-                <div className="bg-white rounded-[40px] border border-slate-100 shadow-xl overflow-hidden">
-                    <div className="p-8 border-b border-slate-50 flex items-center justify-between">
-                        <h3 className="text-xl font-black text-slate-900">Recent Transactions</h3>
-                        <button onClick={() => setActiveTab(role === Role.ADMIN ? "all-orders" : "orders")} className="text-orange-500 font-bold text-sm hover:underline">View All</button>
-                    </div>
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left">
-                            <thead className="bg-slate-50/50 text-slate-400 text-[10px] font-black uppercase tracking-widest">
-                                <tr>
-                                    <th className="px-8 py-4">Transaction ID</th>
-                                    <th className="px-8 py-4">Customer</th>
-                                    <th className="px-8 py-4">Status</th>
-                                    <th className="px-8 py-4">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-50">
-                                {[1, 2, 3].map((idx) => (
-                                    <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                                        <td className="px-8 py-5 text-sm font-bold text-slate-900">#ORD-942{idx}</td>
-                                        <td className="px-8 py-5">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center text-[10px] font-black">JS</div>
-                                                <span className="text-sm font-bold text-slate-700">John Smith</span>
-                                            </div>
-                                        </td>
-                                        <td className="px-8 py-5">
-                                            <span className="px-3 py-1 bg-green-100 text-green-600 text-[10px] font-black rounded-full uppercase tracking-tighter">Completed</span>
-                                        </td>
-                                        <td className="px-8 py-5 text-sm font-black text-slate-900">$124.50</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                <div className="flex gap-3">
+                    <button onClick={fetchStats} className="px-6 py-3 bg-white border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-50 transition-all">Refresh Data</button>
+                    {(role === Role.ADMIN || role === Role.PROVIDER) && (
+                        <button onClick={() => setActiveTab("add-meal")} className="px-6 py-3 bg-orange-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-orange-500/20 active:scale-95 transition-all flex items-center gap-2">
+                            <PlusCircle size={14} /> New Meal
+                        </button>
+                    )}
                 </div>
             </div>
 
-            {/* Right: Sidebar */}
-            <div className="space-y-12">
-                <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-[40px] p-10 text-white relative overflow-hidden shadow-2xl">
-                    <div className="relative z-10">
-                        <h3 className="text-2xl font-black mb-4">Launch New Meal</h3>
-                        <p className="text-slate-400 text-sm mb-8 leading-relaxed">Expand your menu and reach thousands of customers in minutes.</p>
-                        <button onClick={() => setActiveTab("add-meal")} className="bg-orange-500 text-white px-8 py-4 rounded-2xl font-black text-sm inline-flex items-center gap-2 hover:bg-orange-600 transition-all shadow-lg active:scale-95">
-                            <PlusCircle size={18} /> Add Meal
-                        </button>
+            {/* Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {currentMetrics.map((item, i) => (
+                    <div key={i} className="bg-white p-10 rounded-[40px] border border-slate-100 shadow-sm relative overflow-hidden group hover:shadow-xl transition-all">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-slate-500/5 blur-3xl -mr-16 -mt-16 rounded-full" />
+                        <div className={`w-16 h-16 ${item.bg} ${item.color} rounded-[24px] flex items-center justify-center mb-8 shadow-sm`}>
+                            <item.icon size={28} />
+                        </div>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">{item.label}</p>
+                        <h3 className="text-3xl font-black text-slate-900 leading-none">{item.val}</h3>
+                    </div>
+                ))}
+            </div>
+
+            {/* Charts Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Main Graph */}
+                <div className="lg:col-span-2 bg-white p-10 rounded-[40px] border border-slate-100 shadow-xl space-y-10">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h3 className="text-xl font-black text-slate-900 tracking-tight">Performance Trends</h3>
+                            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Revenue/Spending Over Time</p>
+                        </div>
+                    </div>
+
+                    <div className="h-[350px] w-full">
+                        {chartData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height="100%">
+                                <AreaChart data={chartData}>
+                                    <defs>
+                                        <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor="#f97316" stopOpacity={0.3} />
+                                            <stop offset="95%" stopColor="#f97316" stopOpacity={0} />
+                                        </linearGradient>
+                                    </defs>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                    <XAxis
+                                        dataKey="date"
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fontSize: 10, fontWeight: 700, fill: '#94a3b8' }}
+                                        dy={10}
+                                    />
+                                    <YAxis
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fontSize: 10, fontWeight: 700, fill: '#94a3b8' }}
+                                    />
+                                    <Tooltip
+                                        contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)', padding: '15px' }}
+                                        labelStyle={{ fontWeight: 900, marginBottom: '5px' }}
+                                    />
+                                    <Area type="monotone" dataKey={role === 'user' ? 'spent' : 'revenue'} stroke="#f97316" strokeWidth={4} fillOpacity={1} fill="url(#colorValue)" />
+                                </AreaChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <div className="h-full flex items-center justify-center bg-slate-50 rounded-[32px] border-2 border-dashed border-slate-100">
+                                <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">No transaction data available for chart</p>
+                            </div>
+                        )}
                     </div>
                 </div>
 
-                <div className="bg-white rounded-[40px] p-8 border border-slate-100 shadow-sm">
-                    <h2 className="text-lg font-black text-slate-900 mb-8 flex items-center justify-between">Top Rated Foods <Star size={16} className="text-orange-500 fill-orange-500" /></h2>
-                    <div className="space-y-6">
-                        {[
-                            { name: "Spicy Beef Burger", cat: "Burger", price: "$45", sales: 124 },
-                            { name: "Cheese Pizza Large", cat: "Pizza", price: "$65", sales: 98 },
-                        ].map((food, i) => (
-                            <div key={i} className="flex items-center gap-4">
-                                <div className="w-14 h-14 bg-slate-100 rounded-2xl shrink-0"></div>
-                                <div className="flex-1">
-                                    <p className="text-sm font-bold text-slate-900 leading-none mb-1">{food.name}</p>
-                                    <p className="text-[10px] font-bold text-slate-400 tracking-wider uppercase">{food.cat}</p>
+                {/* Side Content */}
+                <div className="space-y-8">
+                    <div className="bg-white p-10 rounded-[40px] border border-slate-100 shadow-xl space-y-8">
+                        <h3 className="text-xl font-black text-slate-900 tracking-tight">Recent Activity</h3>
+                        <div className="space-y-6">
+                            {[1, 2, 3].map(i => (
+                                <div key={i} className="flex items-center gap-4 group cursor-pointer">
+                                    <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-300 group-hover:bg-orange-50 group-hover:text-orange-500 transition-all">
+                                        <ShoppingBag size={20} />
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="text-xs font-black text-slate-900 mb-0.5">Order Ref #{i}842</p>
+                                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Processing</p>
+                                    </div>
+                                    <button className="w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-400">
+                                        <ChevronRight size={14} />
+                                    </button>
                                 </div>
-                                <div className="text-right">
-                                    <p className="text-sm font-black text-slate-900">{food.price}</p>
-                                    <p className="text-[10px] text-green-500 font-bold">{food.sales} sold</p>
-                                </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="bg-slate-900 p-10 rounded-[40px] text-white space-y-6 relative overflow-hidden">
+                        <div className="absolute bottom-0 right-0 w-32 h-32 bg-orange-500/20 blur-3xl -mb-16 -mr-16 rounded-full" />
+                        <Star className="text-orange-500 fill-orange-500" size={32} />
+                        <div>
+                            <h4 className="text-lg font-black tracking-tight">Premium Features</h4>
+                            <p className="text-slate-400 text-xs font-medium leading-relaxed">Upgrade to unlock advanced analytics and inventory management.</p>
+                        </div>
+                        <button className="w-full py-4 bg-white text-slate-900 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-orange-500 hover:text-white transition-all active:scale-95">Upgrade Pro</button>
                     </div>
                 </div>
             </div>

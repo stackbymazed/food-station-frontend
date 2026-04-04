@@ -18,6 +18,7 @@ import { mealService, TMeal } from "@/services/mealService";
 import { orderService } from "@/services/orderService";
 import { toast } from "sonner";
 import { Role } from "@/constants/role";
+import Swal from 'sweetalert2';
 
 // Component Imports
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
@@ -132,7 +133,23 @@ export default function DashboardPage() {
     const loading = toast.loading("Updating role...");
     try {
       await userService.updateUser(userId, { role });
-      toast.success("Role updated", { id: loading });
+      toast.dismiss(loading);
+
+      Swal.fire({
+        title: 'Promotion Success!',
+        text: `New role (${role}) has been assigned and a notification email has been sent to the user.`,
+        icon: 'success',
+        confirmButtonColor: '#f97316',
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+        background: '#ffffff',
+        customClass: {
+          title: 'font-black tracking-tight',
+          popup: 'rounded-[32px]'
+        }
+      });
+
       fetchUsers();
     } catch (err) {
       toast.error("Update failed", { id: loading });
@@ -143,7 +160,22 @@ export default function DashboardPage() {
     const loading = toast.loading("Updating status...");
     try {
       await userService.updateUser(userId, { status });
-      toast.success("Status updated", { id: loading });
+      toast.dismiss(loading);
+
+      Swal.fire({
+        title: 'Status Updated!',
+        text: `The user account is now set to "${status}".`,
+        icon: 'success',
+        confirmButtonColor: '#0f172a',
+        timer: 2000,
+        showConfirmButton: false,
+        background: '#ffffff',
+        customClass: {
+          title: 'font-black tracking-tight',
+          popup: 'rounded-[32px]'
+        }
+      });
+
       fetchUsers();
     } catch (err) {
       toast.error("Update failed", { id: loading });
@@ -207,7 +239,7 @@ export default function DashboardPage() {
         <main className="flex-1 overflow-y-auto p-8 lg:p-12 space-y-12">
           <section className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             {activeTab === "overview" && (
-              <OverviewTab role={role} setActiveTab={setActiveTab} />
+              <OverviewTab role={role} setActiveTab={setActiveTab} userId={user.id} />
             )}
 
             {activeTab === "users" && role === Role.ADMIN && (
