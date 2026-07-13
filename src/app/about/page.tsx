@@ -1,7 +1,6 @@
 "use client";
 
 import { CheckCircle2, Users, Utensils, Award } from "lucide-react";
-
 export default function AboutPage() {
     return (
         <div className="min-h-screen bg-white">
